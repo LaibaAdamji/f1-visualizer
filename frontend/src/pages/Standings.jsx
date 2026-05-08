@@ -9,6 +9,14 @@ function Standings() {
   const [selectedTeam, setSelectedTeam] = useState('all');
   const [sortBy, setSortBy] = useState('points');
 
+  const getDriverKey = (driver, index) => {
+    if (driver.driver_id !== undefined && driver.driver_id !== null) {
+      return `driver-${driver.driver_id}`;
+    }
+
+    return `driver-${driver.first_name}-${driver.last_name}-${driver.team_name}-${index}`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -156,7 +164,7 @@ function Standings() {
             <tbody>
               {sortedStandings.map((driver, index) => (
                 <tr 
-                  key={driver.driver_id} 
+                  key={getDriverKey(driver, index)} 
                   className={`border-b border-white/5 transition-colors hover:bg-white/5 ${
                     index === 0 ? 'bg-yellow-500/5' :
                     index === 1 ? 'bg-white/5' :

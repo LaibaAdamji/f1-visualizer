@@ -32,25 +32,27 @@ function StatCard({ label, value, color = 'red', trend, index = 0 }) {
     ),
   };
 
+  const hoverGradient = gradients[color].split(' ').map(g => `group-hover:${g}`).join(' ');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: -8, scale: 1.02 }}
-      className="glass-card rounded-2xl p-6 relative overflow-hidden group cursor-pointer"
+      className="panel p-6 relative overflow-hidden group cursor-pointer"
     >
       {/* Background gradient on hover */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradients[color]} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+      <div className={`absolute inset-0 bg-gradient-to-br ${gradients[color]} opacity-0 group-hover:opacity-30 transition-opacity duration-300`}></div>
       
       {/* Content */}
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <p className="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">
+            <p className="text-gray-400 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
               {label}
             </p>
-            <p className="text-4xl font-bold text-white font-display">
+            <p className="text-4xl font-bold text-white font-display leading-none">
               {value?.toLocaleString() || '0'}
             </p>
             {trend !== undefined && (
@@ -62,7 +64,7 @@ function StatCard({ label, value, color = 'red', trend, index = 0 }) {
               </div>
             )}
           </div>
-          <div className={`text-white bg-gradient-to-br ${gradients[color]} p-3 rounded-xl`}>
+          <div className={`text-white bg-gradient-to-br ${gradients[color]} p-3 rounded-2xl shadow-lg shadow-black/20`}>
             {icons[color] || icons.red}
           </div>
         </div>

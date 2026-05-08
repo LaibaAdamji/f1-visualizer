@@ -43,15 +43,18 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    // Connect to both databases
+    // Connect to required database first
     await connectPostgreSQL();
-    await connectMongoDB();
+    const mongoConnected = await connectMongoDB();
+    if (!mongoConnected) {
+      console.warn(' Continuing without MongoDB. Hybrid endpoints may be unavailable.');
+    }
     
     // Start Express server
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`\n📚 API Endpoints:`);
+      console.log(` Server is running on port ${PORT}`);
+      console.log(` Health check: http://localhost:${PORT}/api/health`);
+      console.log(`\n API Endpoints:`);
       console.log(`   GET  /api/drivers`);
       console.log(`   GET  /api/drivers/stats/:driverId`);
       console.log(`   GET  /api/drivers/standings/:seasonId`);
@@ -60,7 +63,9 @@ const startServer = async () => {
       console.log(`   GET  /api/races/circuit/:circuitId`);
       console.log(`   GET  /api/teams`);
       console.log(`   GET  /api/teams/:teamId/drivers/:seasonId`);
-      console.log(`   GET  /api/teams/stats/:teamId\n`);
+      console.log(`   GET  /api/teams/stats/:teamId`);
+      console.log(`   GET  /api/views/*`);
+      console.log(`   GET  /api/hybrid/* (requires MongoDB)\n`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

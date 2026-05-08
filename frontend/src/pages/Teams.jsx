@@ -28,7 +28,7 @@ function Teams() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="panel p-10 flex justify-center items-center h-64">
         <div className="text-white text-xl">Loading teams...</div>
       </div>
     );
@@ -39,22 +39,36 @@ function Teams() {
 
   // Prepare pie chart data
   const pieData = standings
-    .filter(s => s.season === 2024)
+    .filter(s => s.total_points !== null && s.total_points !== undefined)
+    .sort((a, b) => (parseFloat(b.total_points) || 0) - (parseFloat(a.total_points) || 0))
+    .slice(0, 5)
     .map(s => ({
       name: s.team_name,
-      value: parseInt(s.total_points) || 0
+      value: parseFloat(s.total_points) || 0
     }))
     .filter(d => d.value > 0);
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-white mb-8">Formula 1 Teams</h1>
+    <div className="space-y-8">
+      <div className="page-header">
+        <div className="page-kicker mb-3">Constructor overview</div>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Formula 1 Teams</h1>
+        <p className="text-gray-300 max-w-2xl leading-relaxed">
+          Explore each constructor’s identity, home country, and 2024 season performance in one polished view.
+        </p>
+      </div>
 
       {/* Points Distribution Chart */}
       {pieData.length > 0 && (
-        <div className="bg-f1-gray rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-f1-red mb-4">2024 Points Distribution</h2>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="panel overflow-hidden">
+          <div className="panel-header">
+            <div>
+              <h2 className="panel-title">2024 Points Distribution</h2>
+              <p className="panel-subtitle">Share of total constructor points</p>
+            </div>
+          </div>
+          <div className="px-3 sm:px-6 py-6">
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
               <Pie
                 data={pieData}
@@ -71,27 +85,27 @@ function Teams() {
                 ))}
               </Pie>
               <Tooltip 
-                contentStyle={{ backgroundColor: '#38383F', border: 'none', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: 'rgba(21, 21, 30, 0.96)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', backdropFilter: 'blur(12px)' }}
               />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
+            </div>
         </div>
       )}
 
       {/* Teams Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {teams.map((team) => {
-          const teamStanding = standings.find(s => s.team_id === team.teamId && s.season === 2024) || {};
+          const teamStanding = standings.find(s => s.team_id === team.teamId) || {};
           
           return (
             <div 
               key={team.teamId} 
-              className="bg-f1-gray rounded-lg p-6 hover:bg-gray-700 transition"
+                className="panel p-6 hover:-translate-y-1 transition-transform duration-300"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-bold text-white">{team.teamName}</h3>
-                <span className="text-3xl">🏁</span>
               </div>
 
               <div className="space-y-3">
@@ -108,7 +122,7 @@ function Teams() {
                 <div className="flex justify-between">
                   <span className="text-gray-400">Championships:</span>
                   <span className="text-yellow-400 font-bold text-lg">
-                    {team.championshipsWon} 🏆
+                    {team.championshipsWon} Title{team.championshipsWon !== 1 ? 's' : ''}
                   </span>
                 </div>
 

@@ -1,17 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: dark;
+    --surface: rgba(21, 21, 30, 0.72);
+    --surface-strong: rgba(30, 30, 40, 0.9);
+    --border-soft: rgba(255, 255, 255, 0.08);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply font-sans antialiased;
-    background: linear-gradient(135deg, #0a0a0f 0%, #15151e 25%, #1e1e28 50%, #15151e 75%, #0a0a0f 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    @apply font-sans antialiased text-white;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top left, rgba(225, 6, 0, 0.14), transparent 32%),
+      radial-gradient(circle at top right, rgba(0, 210, 190, 0.12), transparent 28%),
+      linear-gradient(135deg, #09090c 0%, #111118 24%, #171720 50%, #111118 76%, #09090c 100%);
+    background-size: 100% 100%, 100% 100%, 400% 400%;
+    animation: gradientShift 18s ease infinite;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-display tracking-tight;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer base {
+  ::selection {
+    background: rgba(225, 6, 0, 0.35);
+    color: #fff;
   }
 }
 
@@ -22,11 +50,11 @@
 
 @layer components {
   .glass-card {
-    background: rgba(56, 56, 63, 0.15);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background: var(--surface);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
   }
 
   .glass-card-hover {
@@ -41,8 +69,14 @@
 
   .gradient-border {
     position: relative;
-    background: rgba(56, 56, 63, 0.15);
-    backdrop-filter: blur(16px);
+    background: var(--surface);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .gradient-border > * {
+    position: relative;
+    z-index: 1;
   }
 
   .gradient-border::before {
@@ -56,6 +90,47 @@
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+  }
+
+  .page-shell {
+    @apply relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .page-header {
+    @apply glass-card rounded-[2rem] p-6 sm:p-8 border border-white/10;
+    background:
+      linear-gradient(135deg, rgba(225, 6, 0, 0.08), transparent 40%),
+      linear-gradient(315deg, rgba(0, 210, 190, 0.08), transparent 35%),
+      var(--surface-strong);
+  }
+
+  .page-kicker {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-gray-300;
+  }
+
+  .panel {
+    @apply glass-card rounded-[1.75rem] border border-white/10;
+  }
+
+  .panel-header {
+    @apply flex flex-col gap-2 border-b border-white/10 px-6 py-5 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .panel-title {
+    @apply text-2xl sm:text-3xl font-bold text-white;
+  }
+
+  .panel-subtitle {
+    @apply text-sm text-gray-400;
+  }
+
+  .soft-grid {
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .metric-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-gray-200;
   }
 }
 
@@ -77,4 +152,73 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #FF0800 0%, #E10600 100%);
+}
+
+/* Removed emergency override that forced opacity; visibility fallbacks handled via Layout script. */
+
+/* Form Elements Styling */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="number"],
+textarea,
+select {
+  @apply bg-black/30 border border-white/15 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:outline-none focus:border-f1-red/60 focus:ring-2 focus:ring-f1-red/20 transition-all duration-300;
+}
+
+input[type="text"]:hover,
+input[type="search"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+textarea:hover,
+select:hover {
+  border-color: rgba(225, 6, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Button Styling */
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-f1-red to-red-700 text-white font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-f1-red/40 hover:scale-105 active:scale-95 transition-all duration-300;
+}
+
+.btn-secondary {
+  @apply bg-white/10 border border-white/20 text-white font-semibold py-3 px-6 rounded-lg hover:bg-white/15 hover:border-white/30 active:scale-95 transition-all duration-300;
+}
+
+.btn-outline {
+  @apply border-2 border-f1-red text-f1-red bg-transparent font-semibold py-2.5 px-5 rounded-lg hover:bg-f1-red/10 active:scale-95 transition-all duration-300;
+}
+
+/* Animation for pulse */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skeleton Loading */
+.skeleton {
+  @apply bg-gradient-to-r from-white/5 via-white/10 to-white/5 rounded-lg;
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

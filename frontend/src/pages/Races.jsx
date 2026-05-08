@@ -28,27 +28,40 @@ function Races() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="panel p-10 flex justify-center items-center h-64">
         <div className="text-white text-xl">Loading races...</div>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-white mb-8">Formula 1 Races</h1>
+    <div className="space-y-8">
+      <div className="page-header">
+        <div className="page-kicker mb-3">Race calendar</div>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Formula 1 Races</h1>
+        <p className="text-gray-300 max-w-2xl leading-relaxed">
+          Browse the season schedule, winners, and circuit details in a cleaner event timeline.
+        </p>
+      </div>
 
       {/* Race Calendar */}
-      <div className="bg-f1-gray rounded-lg p-6 mb-8">
-        <h2 className="text-2xl font-bold text-f1-red mb-4">2024 Race Calendar</h2>
-        <div className="space-y-4">
-          {races.map((race) => {
+      <div className="panel overflow-hidden">
+        <div className="panel-header">
+          <div>
+            <h2 className="panel-title">2025 Race Calendar</h2>
+            <p className="panel-subtitle">Every round and its winning entry</p>
+          </div>
+        </div>
+        <div className="space-y-4 p-4 sm:p-6">
+          {races
+            .filter(r => (r.season && (Number(r.season) === 2025 || (r.season.year && Number(r.season.year) === 2025))) || new Date(r.raceDate).getFullYear() === 2025)
+            .map((race) => {
             const winner = winners.find(w => w.race_id === race.raceId);
             
             return (
               <div 
                 key={race.raceId}
-                className="bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition cursor-pointer"
+                className="glass-card rounded-2xl p-5 hover:-translate-y-1 transition-transform duration-300 cursor-pointer border border-white/10"
                 onClick={() => setSelectedRace(race)}
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -73,7 +86,7 @@ function Races() {
                     <div className="mt-4 md:mt-0 md:ml-4 text-right">
                       <p className="text-sm text-gray-400">Winner</p>
                       <p className="text-lg font-bold text-f1-red">
-                        🏆 {winner.winner_name}
+                        {winner.winner_name}
                       </p>
                       <p className="text-sm text-gray-300">{winner.winning_team}</p>
                     </div>
@@ -109,7 +122,7 @@ function Races() {
           onClick={() => setSelectedRace(null)}
         >
           <div 
-            className="bg-f1-gray rounded-lg p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto"
+            className="panel rounded-[1.75rem] p-8 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-3xl font-bold text-f1-red mb-4">
@@ -127,7 +140,7 @@ function Races() {
 
             <button
               onClick={() => setSelectedRace(null)}
-              className="mt-6 w-full bg-f1-red text-white py-2 px-4 rounded hover:bg-red-700 transition"
+              className="mt-6 w-full bg-gradient-to-r from-f1-red to-red-700 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg hover:shadow-f1-red/40 transition-all duration-300 transform hover:scale-105"
             >
               Close
             </button>
